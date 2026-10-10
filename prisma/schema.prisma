@@ -1,0 +1,176 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String         @id @default(uuid())
+  discordId        String         @unique
+  nomeGuerra       String
+  avatarUrl        String?
+  patenteId        String
+  patente          Rank           @relation(fields: [patenteId], references: [id])
+  secaoEstadoMaior String?
+  isOwner          Boolean        @default(false)
+  assiduidade      Float          @default(100.0)
+  cursos           String[]       @default([])
+  medalhas         Json?
+  registrosG1      RegistroG1[]
+  presencas        Presenca[]
+  userEsquadras    UserEsquadra[]
+  operacoesCriadas Operacao[]     @relation("CriadorOp")
+  logsAuditoria    AuditLog[]
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  @@index([discordId])
+  @@index([patenteId])
+}
+
+model Rank {
+  id          String       @id @default(uuid())
+  nome        String       @unique
+  sigla       String       @unique
+  pesoComando Int
+  users       User[]
+  permissions Permission[] @relation("RankPermissions")
+  createdAt   DateTime     @default(now())
+
+  @@index([pesoComando])
+}
+
+model Permission {
+  id        String   @id @default(uuid())
+  chave     String   @unique
+  descricao String
+  ranks     Rank[]   @relation("RankPermissions")
+  createdAt DateTime @default(now())
+}
+
+model Operacao {
+  id                String        @id @default(uuid())
+  titulo            String
+  nomeCodinome      String
+  tipo              String
+  dataHora          DateTime
+  status            String
+  contextoLore      String        @db.Text
+  faccaoInimiga     String
+  nivelAmeaca       String
+  climaHorario      String
+  objetivoPrincipal String        @db.Text
+  objetivosSec      String[]      @default([])
+  regrasEngajamento String        @db.Text
+  uniformeLoadout   String        @db.Text
+  frequenciasRadio  Json?
+  pontosMapaJson    Json?
+  criadorId         String
+  criador           User          @relation("CriadorOp", fields: [criadorId], references: [id])
+  esquadras         Esquadra[]
+  presencas         Presenca[]
+  relatorioAAR      RelatorioAAR?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  @@index([criadorId])
+  @@index([status])
+  @@index([dataHora])
+}
+
+model Esquadra {
+  id         String       @id @default(uuid())
+  operacaoId String
+  operacao   Operacao     @relation(fields: [operacaoId], references: [id], onDelete: Cascade)
+  nome       String
+  frequencia String?
+  liderId    String?
+  membros    UserEsquadra[]
+  createdAt  DateTime     @default(now())
+
+  @@unique([operacaoId, nome])
+  @@index([operacaoId])
+}
+
+model UserEsquadra {
+  id         String   @id @default(uuid())
+  esquadraId String
+  esquadra   Esquadra @relation(fields: [esquadraId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  funcao     String
+  createdAt  DateTime @default(now())
+
+  @@unique([esquadraId, userId])
+  @@index([esquadraId])
+  @@index([userId])
+}
+
+model Presenca {
+  id            String   @id @default(uuid())
+  operacaoId    String
+  operacao      Operacao @relation(fields: [operacaoId], references: [id], onDelete: Cascade)
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status        String
+  justificativa String?
+  confirmedAt   DateTime?
+  createdAt     DateTime @default(now())
+
+  @@unique([operacaoId, userId])
+  @@index([operacaoId])
+  @@index([userId])
+}
+
+model RelatorioAAR {
+  id           String   @id @default(uuid())
+  operacaoId   String   @unique
+  operacao     Operacao @relation(fields: [operacaoId], references: [id], onDelete: Cascade)
+  resultado    String
+  causalidades Int      @default(0)
+  resumoAcao   String   @db.Text
+  destaques    String[] @default([])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model RegistroG1 {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tipo      String
+  descricao String   @db.Text
+  autorId   String
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  acao      String
+  detalhes  String   @db.Text
+  ip        String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+model Documento {
+  id        String   @id @default(uuid())
+  titulo    String
+  categoria String
+  conteudo  String   @db.Text
+  tags      String[] @default([])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([categoria])
+}
