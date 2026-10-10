@@ -1,6 +1,7 @@
 {
   "name": "gab-c2-system",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "description": "Sistema Integrado de Comando e Controle e Gestão MILSIM",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -8,9 +9,10 @@
     "start": "next start",
     "lint": "next lint",
     "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate dev",
+    "prisma:migrate": "prisma migrate deploy",
     "prisma:studio": "prisma studio",
-    "db:seed": "tsx prisma/seed.ts"
+    "db:seed": "tsx prisma/seed.ts",
+    "postbuild": "prisma generate"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
@@ -21,7 +23,7 @@
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-popover": "^1.0.7",
     "@radix-ui/react-select": "^2.0.0",
-    "@radix-ui/react-slot": "^2.0.2",
+    "@radix-ui/react-slot": "^2.0.1",
     "@radix-ui/react-tabs": "^1.0.4",
     "@radix-ui/react-tooltip": "^1.0.7",
     "class-variance-authority": "^0.7.0",
