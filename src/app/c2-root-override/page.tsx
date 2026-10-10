@@ -1,4 +1,8 @@
-export default function AdminOverridePage() {
+import { requireOwnerSession } from '@/lib/session';
+
+export default async function AdminOverridePage() {
+  await requireOwnerSession();
+
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#090D12] px-6 py-12 text-slate-100">
       <div className="w-full max-w-4xl rounded-2xl border border-red-500/40 bg-[#1A232E] p-8 shadow-2xl shadow-red-500/10">
@@ -27,36 +31,6 @@ export default function AdminOverridePage() {
           <div className="rounded-xl border border-tactical-border bg-slate-900/50 p-4">
             <div className="text-[10px] uppercase tracking-[0.25em] text-slate-400">Auditoria</div>
             <div className="mt-2 text-2xl font-semibold text-red-300">ONLINE</div>
-          </div>
-        </div>
-
-        <div className="mt-8 grid gap-4 lg:grid-cols-2">
-          <div className="rounded-xl border border-tactical-border bg-slate-900/40 p-4">
-            <div className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-slate-300">Ações críticas</div>
-            <ul className="space-y-2 text-sm text-slate-300">
-              <li>• Editar pesos e hierarquias das patentes</li>
-              <li>• Gerir permissões dinâmicas por cargo</li>
-              <li>• Substituir presença e dados do sistema</li>
-              <li>• Lockdown global em caso de reestruturação</li>
-            </ul>
-          </div>
-
-          <div className="rounded-xl border border-tactical-border bg-slate-900/40 p-4">
-            <div className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-slate-300">Status</div>
-            <div className="space-y-3 text-sm text-slate-300">
-              <div className="flex items-center justify-between">
-                <span>Operações em curso</span>
-                <span className="text-tactical-accent-light">03</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span>Efetivo total</span>
-                <span className="text-tactical-accent-light">128</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span>Última auditoria</span>
-                <span className="text-tactical-accent-light">02:10Z</span>
-              </div>
-            </div>
           </div>
         </div>
       </div>
