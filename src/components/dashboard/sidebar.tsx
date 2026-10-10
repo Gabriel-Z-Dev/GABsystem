@@ -1,13 +1,22 @@
-import { Home, ShieldCheck, ClipboardList, Users, Rocket, BookOpen, Settings } from 'lucide-react';
+import Link from 'next/link';
 
 const links = [
-  { label: 'Dashboard', href: '/', icon: Home },
-  { label: 'Efetivo', href: '#', icon: Users },
-  { label: 'Operações', href: '#', icon: Rocket },
-  { label: 'ORBAT', href: '#', icon: ClipboardList },
-  { label: 'Doutrina', href: '#', icon: BookOpen },
-  { label: 'Config', href: '#', icon: Settings },
-];
+  { label: 'Dashboard', href: '/', icon: 'home' },
+  { label: 'Efetivo', href: '/efetivo', icon: 'users' },
+  { label: 'Operações', href: '/operacoes', icon: 'rocket' },
+  { label: 'ORBAT', href: '/operacoes#orbat', icon: 'clipboard' },
+  { label: 'Doutrina', href: '/doctrina', icon: 'book' },
+  { label: 'Config', href: '/c2-root-override', icon: 'settings' },
+] as const;
+
+const iconMap = {
+  home: '⌂',
+  users: '◉',
+  rocket: '✦',
+  clipboard: '▣',
+  book: '◫',
+  settings: '⚙',
+} as const;
 
 export function Sidebar() {
   return (
@@ -31,21 +40,21 @@ export function Sidebar() {
       </div>
 
       <nav className="space-y-2">
-        {links.map(({ label, href, icon: Icon }) => (
-          <a
+        {links.map(({ label, href, icon }) => (
+          <Link
             key={label}
             href={href}
             className="flex items-center gap-3 rounded-lg border border-transparent px-3 py-2 text-sm text-slate-300 transition hover:border-tactical-border hover:bg-tactical-card"
           >
-            <Icon className="h-4 w-4 text-tactical-accent-light" />
+            <span className="text-tactical-accent-light">{iconMap[icon]}</span>
             {label}
-          </a>
+          </Link>
         ))}
       </nav>
 
       <div className="mt-8 rounded-xl border border-yellow-500/30 bg-yellow-500/5 p-3">
         <div className="flex items-center gap-2 text-yellow-300">
-          <ShieldCheck className="h-4 w-4" />
+          <span>◈</span>
           <span className="text-xs uppercase tracking-[0.25em]">SuperAdmin</span>
         </div>
         <p className="mt-2 text-sm text-slate-300">Guardado em rota oculta e acesso mestre configurado.</p>
