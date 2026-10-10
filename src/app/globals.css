@@ -12,11 +12,24 @@ html {
 
 body {
   @apply bg-tactical-dark text-slate-100 antialiased;
-  background-image: radial-gradient(circle at top, rgba(75, 107, 64, 0.15), transparent 30%);
+  font-family: 'Inter', sans-serif;
+  background-image:
+    radial-gradient(circle at top, rgba(75, 107, 64, 0.18), transparent 30%),
+    linear-gradient(180deg, rgba(9, 13, 18, 1) 0%, rgba(14, 20, 26, 1) 100%);
 }
 
 * {
   box-sizing: border-box;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+  mask-image: radial-gradient(circle at center, black 30%, transparent 85%);
 }
 
 ::-webkit-scrollbar {
