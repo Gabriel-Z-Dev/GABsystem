@@ -4,12 +4,15 @@ import './globals.css';
 export const metadata: Metadata = {
   title: 'GAB C2 / BRM5',
   description: 'Sistema Integrado de Comando e Controle e Gestão MILSIM',
+  icons: {
+    icon: '/favicon.ico',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR">
-      <body>{children}</body>
+    <html lang="pt-BR" suppressHydrationWarning>
+      <body className="bg-tactical-dark text-slate-100 antialiased">{children}</body>
     </html>
   );
 }
